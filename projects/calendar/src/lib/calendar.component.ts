@@ -19,7 +19,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 
 import { CustomControl } from './custom-control';
-import { addMonths, areDatesInSameMonth, isValidDate, setDate, startOfDay, startOfMonth } from './date-utils/date.utils';
+import { addMonths, areDatesInSameMonth, getFirstAndLastDateOfWeek, isValidDate, setDate, startOfDay, startOfMonth } from './date-utils/date.utils';
 
 @Component({
   selector: 'lib-calendar',
@@ -37,7 +37,7 @@ import { addMonths, areDatesInSameMonth, isValidDate, setDate, startOfDay, start
     }
   ]
 })
-export class CalendarComponent extends CustomControl<Date> implements AfterContentInit, ControlValueAccessor, OnChanges, OnInit {
+export class CalendarComponent extends CustomControl<Date | {firstDate: Date, lastDate: Date}> implements AfterContentInit, ControlValueAccessor, OnChanges, OnInit {
   months!: readonly Date[];
   touched = false;
   disabled = false;
@@ -48,9 +48,10 @@ export class CalendarComponent extends CustomControl<Date> implements AfterConte
   private onChange?: (updatedValue: Date) => void;
   private onTouched?: () => void;
 
-  @Input() value?: Date;
+  @Input() value!: Date;
   @Input() min?: Date | null;
   @Input() monthAndYearFormat?: string;
+  @Input() shouldSelectWeek: boolean = false;
 
   // locale input is for demo purposes only - until there is an API for switching the locale at runtime
   private _locale?: string;
@@ -99,7 +100,7 @@ export class CalendarComponent extends CustomControl<Date> implements AfterConte
     return this._numberOfMonths;
   }
 
-  @Output() valueChange = new EventEmitter<Date>();
+  @Output() valueChange = new EventEmitter<Date | {firstDate: Date, lastDate: Date}>();
 
   trackByMilliseconds = (_: number, month: Date) => {
     // avoid destroying month and month-header components in one-month view (with month steppers)
@@ -157,7 +158,14 @@ export class CalendarComponent extends CustomControl<Date> implements AfterConte
       this.value = date;
       this.activeMonth = date;
       this.activeDate = date;
-      this.valueChange.emit(date);
+
+      if (this.shouldSelectWeek) {
+        this.valueChange.emit(getFirstAndLastDateOfWeek(date));
+      } else {
+        this.valueChange.emit(date);
+      }
+
+      
       if (this.onChange) {
         this.onChange(date);
       }
@@ -169,7 +177,9 @@ export class CalendarComponent extends CustomControl<Date> implements AfterConte
 
   writeValue(value: Date) {
     // TODO: what if calendar or the given date is disabled?
-    this.value = isValidDate(value) ? startOfDay(value) : undefined;
+    if (isValidDate(value)) {
+      this.value = startOfDay(value);
+    }
     this.changeDetectorRef.markForCheck();
 
     if (this.showMonthStepper && this.value) {

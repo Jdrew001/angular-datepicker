@@ -10,16 +10,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { WeekDay } from '@angular/common';
-import { DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
-import { DayStepDelta } from './day-step-delta.model';
-import { startOfDay, areDatesInSameMonth, getDaysOfMonth, isSameDate, isDateAfter, addDays, isValidDate } from '../date-utils/date.utils';
-
-export const keyCodesToDaySteps = new Map<number, DayStepDelta>([
-  [RIGHT_ARROW, 1],
-  [LEFT_ARROW, -1],
-  [DOWN_ARROW, 7],
-  [UP_ARROW, -7]
-]);
+import { areDatesInSameMonth, getDaysOfMonth, getWeekNumber, isDateAfter, isSameDate, isValidDate, startOfDay } from '../date-utils/date.utils';
 
 @Component({
   selector: 'lib-month',
@@ -28,16 +19,27 @@ export const keyCodesToDaySteps = new Map<number, DayStepDelta>([
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MonthComponent implements AfterViewInit, OnChanges {
-  daysOfMonth!: readonly Date[];
+  daysOfMonth!: Array<{day: Date, weekNumber: number}>;
   firstDayOfMonth!: string;
   currentDate = startOfDay(new Date());
+  highlightedWeekNum!: number;
+  highlightedDate!: Date;
+  selectedWeek!: number;
 
-  private readonly dateSelector = 'time.month__date';
+  _selectedDate?: Date;
+  get selectedDate() { return this._selectedDate!; }
+  @Input() set selectedDate(val: Date) {
+    if(val) {
+      this._selectedDate = val;
 
-  @Input() selectedDate?: Date;
+      this.detectSelectedWeek();
+    }
+  }
+
   @Input() min?: Date | null;
   @Input() locale?: string;
   @Input() activeDate!: Date;
+  @Input() weekSelect!: boolean;
 
   private _month!: Date;
 
@@ -48,8 +50,9 @@ export class MonthComponent implements AfterViewInit, OnChanges {
   set month(month: Date) {
     if (!this._month || !areDatesInSameMonth(this._month, month)) {
       this._month = month;
-      this.daysOfMonth = getDaysOfMonth(this._month);
-      this.firstDayOfMonth = WeekDay[this.daysOfMonth[0].getDay()].toLowerCase();
+      let tempData = getDaysOfMonth(this._month);
+      this.daysOfMonth = this.prepareData(tempData);
+      this.firstDayOfMonth = WeekDay[this.daysOfMonth[0].day.getDay()].toLowerCase();
     }
   }
 
@@ -84,40 +87,49 @@ export class MonthComponent implements AfterViewInit, OnChanges {
     return !!this.currentDate && isSameDate(dayOfMonth, this.currentDate);
   }
 
-  onKeydown(event: KeyboardEvent) {
-    const dayStepDelta = keyCodesToDaySteps.get(event.keyCode);
-
-    if (dayStepDelta) {
-      event.preventDefault();
-      const activeDate = addDays(this.activeDate, dayStepDelta);
-      this.activeDateChange.emit(activeDate);
+  onDateClick(date: any) {
+    if (isValidDate(date)) {
+      this.selectDate(date);
     }
   }
 
-  onMonthClick(event: MouseEvent | Event) {
-    // should be MouseEvent | KeyboardEvent, but $event type for keyup.enter is not inferred correctly
-    const target = event.target as HTMLElement;
+  //hover event will update the highlighted week num
+  detectHighlight(dayOfMonth: {day: Date, weekNumber: number}) {
+    this.highlightedWeekNum = dayOfMonth.weekNumber;
+    this.highlightedDate = dayOfMonth.day;
+    this.changeDetectorRef.detectChanges();
+  }
 
-    if (this.isTimeElement(target)) {
-      this.onDateClick(target);
+  //highlight hovered week or day depending on flag
+  shouldHighlight(dayOfMonth: {day: Date, weekNumber: number}) {
+    // week select true, highlight row
+    if (this.weekSelect) {
+      return dayOfMonth.weekNumber == this.highlightedWeekNum;
+    } else {
+      return dayOfMonth.day == this.highlightedDate;
     }
   }
 
-  private onDateClick(timeElement: HTMLTimeElement) {
-    const selectedDate = new Date(timeElement.dateTime + 'T00:00');
-
-    if (isValidDate(selectedDate)) {
-      this.selectDate(selectedDate);
+  shouldHighlightWeek(dayOfMonth: {day: Date, weekNumber: number}) {
+    if (this.weekSelect) {
+      return dayOfMonth.weekNumber == this.selectedWeek;
     }
+
+    return false;
+  }
+
+  detectSelectedWeek() {
+    this.selectedWeek = getWeekNumber(this.selectedDate!);
+  }
+
+  // Prepare data for consumption in the calendar
+  private prepareData(days: Array<Date>): Array<{day: Date, weekNumber: number}> {
+    return days.map(day => ({day: day, weekNumber: getWeekNumber(day)}));
   }
 
   private selectDate(date: Date) {
     if (!this.isSelected(date) && !this.isDisabled(date)) {
       this.selectedDateChange.emit(date);
     }
-  }
-
-  private isTimeElement(element: HTMLElement): element is HTMLTimeElement {
-    return !!element && element.matches(this.dateSelector);
   }
 }

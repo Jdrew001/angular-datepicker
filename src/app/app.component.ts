@@ -18,11 +18,12 @@ export class AppComponent {
   localeControl = new FormControl('');
   minControl = new FormControl(toISODateString(new Date()));
   dateControl = new FormControl();
-  datepickerControl = new FormControl();
+  //datepickerControl = new FormControl();
   disabledControl = new FormControl(false);
   numberOfMonthsControl = new FormControl(1);
   monthAndYearFormatControl = new FormControl();
   firstMonthControl = new FormControl();
+  datepickerControl!: any;
 
   demoFormGroup = new FormGroup({
     firstDayOfWeek: this.firstDayOfWeekControl,
@@ -60,5 +61,10 @@ export class AppComponent {
 
   selectToday() {
     this.dateControl.setValue(this.today);
+  }
+
+  calValueChange(val: any) {
+    console.log('value', val);
+    this.datepickerControl = val;
   }
 }

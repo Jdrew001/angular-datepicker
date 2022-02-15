@@ -1,17 +1,16 @@
 <form [formGroup]="demoFormGroup">
   <fieldset class="fieldset">
     <legend>Datepicker with custom input and button, default calendar settings</legend>
-
+    <span libModalToggle [modal]="datepickerModal"><button type="button" aria-haspopup="dialog" aria-owns="datepicker-calendar">📅</button></span>
+    
     <div class="form-control">
-      <label for="datepicker" class="form-control__label">Deadline for next feature</label><br>
-      <span libModalToggle [modal]="datepickerModal">
-        <input type="text" readonly id="datepicker" placeholder="Select date" [value]="datepickerControl.value | date">
-        <button type="button" aria-haspopup="dialog" aria-owns="datepicker-calendar">📅</button>
-      </span>
+      {{ datepickerControl?.firstDate | date }} - {{ datepickerControl?.lastDate | date }}
     </div>
     <lib-modal #datepickerModal>
-      <lib-calendar [formControl]="datepickerControl"
+      <lib-calendar
                     id="datepicker-calendar"
+                    [shouldSelectWeek]="true"
+                    (valueChange)="calValueChange($event)"
       ></lib-calendar>
     </lib-modal>
   </fieldset>

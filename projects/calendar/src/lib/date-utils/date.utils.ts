@@ -2,6 +2,7 @@ import { FormatWidth, getLocaleDateFormat } from '@angular/common';
 
 import { NumericDayOfWeek } from './day-of-week';
 import { memoize } from './memoize';
+import * as moment from 'moment';
 
 export function setDay(date: Date, dayOfWeek: NumericDayOfWeek) {
   return addDays(date, dayOfWeek - date.getDay());
@@ -33,6 +34,17 @@ export function startOfDay(date: Date) {
 
 export function startOfMonth(date: Date) {
   return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+export function getFirstAndLastDateOfWeek(date: Date): {firstDate: Date, lastDate: Date} {
+  let currentDate = moment(date);
+  let weekStart = currentDate.clone().startOf('week').toDate();
+  let weekEnd = currentDate.clone().endOf('week').toDate();
+  return { firstDate: weekStart, lastDate: weekEnd};
+}
+
+export function getWeekNumber(date: Date) {
+  return moment(date, "MM-DD-YYYY").week();
 }
 
 export function getDaysOfMonth(month: Date) {
@@ -102,4 +114,8 @@ export function toLocaleStringSupportsLocales() {
     return e instanceof RangeError;
   }
   return false;
+}
+
+export function getDayNumber(date: Date) {
+  return date.getDay();
 }

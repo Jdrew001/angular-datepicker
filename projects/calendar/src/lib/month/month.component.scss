@@ -15,7 +15,7 @@
   @each $first-day-of-week, $days-of-week in $first-day-of-week-to-days-of-week {
     @each $day-of-week in $days-of-week {
       :host-context(.calendar--first-day-of-week-#{$first-day-of-week}) &--first-day-#{$day-of-week} {
-        time:first-child {
+        div.time-container:first-child {
           // flex item fallback
           margin-left: (index($days-of-week, $day-of-week) - 1) * $calendar-cell-size--accessible;
           // grid item
@@ -54,14 +54,39 @@
     height: 100%;
   }
 
-  .time-container:hover {
+  // .time-container:hover {
+  //   height: 100%;
+  //   background-color: var(--clr-vertical-nav-bg-color, #e8e8e8);
+  //   cursor: pointer;
+  //   border-radius: 3px;
+  // }
+
+  .should-highlight {
     height: 100%;
     background-color: var(--clr-vertical-nav-bg-color, #e8e8e8);
     cursor: pointer;
     border-radius: 3px;
   }
 
+  .selected-week {
+    height: 100%;
+    background-color: var(--clr-vertical-nav-bg-color, #e8e8e8);
+    cursor: pointer;
+    border-radius: 3px;
+    opacity: 0.8;
+  }
+
   .month__date {
     line-height: 3rem;
+  }
+
+  .time-container.current-date {
+    font-weight: bold;
+    opacity: 0.8;
+  }
+
+  .time-container.selected-date {
+    background-color: var(--clr-vertical-nav-bg-color, #e8e8e8);
+    opacity: 0.8;
   }
 }
