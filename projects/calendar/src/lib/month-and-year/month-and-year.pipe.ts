@@ -1,7 +1,7 @@
 import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core';
 import { formatDate } from '@angular/common';
+import { getFallbackLocaleMonthAndYearFormat, isValidDate, monthAndYearFormatOptions, toLocaleStringSupportsLocales } from '../date-utils/date.utils';
 
-import { getFallbackLocaleMonthAndYearFormat, isValidDate, monthAndYearFormatOptions, toLocaleStringSupportsLocales } from 'date-utils';
 
 @Pipe({
   name: 'monthAndYear'

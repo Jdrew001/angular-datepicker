@@ -5,7 +5,7 @@ import { CdkAriaLive } from '@angular/cdk/a11y';
 
 import { MockDirective, MockPipe } from 'ng-mocks';
 
-import { Month } from 'date-utils';
+import { Month } from 'projects/calendar/src/lib/date-utils';
 
 import { MonthHeaderComponent } from './month-header.component';
 import { MonthAndYearPipe } from '../month-and-year/month-and-year.pipe';

@@ -11,9 +11,8 @@ import {
 } from '@angular/core';
 import { WeekDay } from '@angular/common';
 import { DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
-
-import { addDays, areDatesInSameMonth, getDaysOfMonth, isValidDate, isDateAfter, isSameDate, startOfDay } from 'date-utils';
 import { DayStepDelta } from './day-step-delta.model';
+import { startOfDay, areDatesInSameMonth, getDaysOfMonth, isSameDate, isDateAfter, addDays, isValidDate } from '../date-utils/date.utils';
 
 export const keyCodesToDaySteps = new Map<number, DayStepDelta>([
   [RIGHT_ARROW, 1],

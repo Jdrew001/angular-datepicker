@@ -5,7 +5,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { MockComponent } from 'ng-mocks';
 
-import { Month, startOfMonth } from 'date-utils';
+import { Month, startOfMonth } from 'projects/calendar/src/lib/date-utils';
 
 import { CalendarComponent } from './calendar.component';
 import { DaysOfWeekComponent } from './days-of-week/days-of-week.component';

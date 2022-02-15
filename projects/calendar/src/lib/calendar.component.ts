@@ -18,8 +18,8 @@ import { getLocaleFirstDayOfWeek, WeekDay } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 
-import { addMonths, areDatesInSameMonth, isValidDate, setDate, startOfDay, startOfMonth } from 'date-utils';
-import { CustomControl } from '../../../modal/src/lib/custom-control';
+import { CustomControl } from './custom-control';
+import { addMonths, areDatesInSameMonth, isValidDate, setDate, startOfDay, startOfMonth } from './date-utils/date.utils';
 
 @Component({
   selector: 'lib-calendar',

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { formatDate } from '@angular/common';
 
-import { getDaysOfMonth, Month } from 'date-utils';
+import { getDaysOfMonth, Month } from 'projects/calendar/src/lib/date-utils';
 
 import { MonthComponent } from './month.component';
 

@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
 
-import { startOfDay, toISODateString } from 'date-utils';
+import { startOfDay, toISODateString } from 'projects/calendar/src/lib/date-utils';
 
 @Component({
   selector: 'app-root',

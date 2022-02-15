@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-
-import { addMonths, startOfMonth } from 'date-utils';
+import { addMonths, startOfMonth } from '../date-utils/date.utils';
 
 @Component({
   selector: 'lib-month-header',

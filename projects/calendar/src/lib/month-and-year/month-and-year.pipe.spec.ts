@@ -2,7 +2,7 @@ import { formatDate, registerLocaleData } from '@angular/common';
 import HungarianLocale from '@angular/common/locales/hu';
 import BritishLocale from '@angular/common/locales/en-GB';
 
-import { Month } from 'date-utils';
+import { Month } from 'projects/calendar/src/lib/date-utils';
 
 import { MonthAndYearPipe } from './month-and-year.pipe';
 

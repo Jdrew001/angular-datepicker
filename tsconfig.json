@@ -24,7 +24,7 @@
     "noUnusedParameters": true,
     "paths": {
       "date-utils": [
-        "projects/date-utils/index.ts"
+        "projects/calendar/src/lib/date-utils/index.ts"
       ],
       "calendar": [
         "projects/calendar/src/public-api.ts"
