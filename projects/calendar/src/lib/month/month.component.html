@@ -8,18 +8,20 @@
      role="listbox"
      tabindex="-1"
 >
+<div class="time-container" *ngFor="let dayOfMonth of daysOfMonth">
   <time class="month__date"
-        *ngFor="let dayOfMonth of daysOfMonth"
-        [dateTime]="dayOfMonth | date:'yyyy-MM-dd'"
-        [attr.aria-label]="dayOfMonth | date:'fullDate':undefined:locale"
-        [class.month__date--selected]="isSelected(dayOfMonth)"
-        [attr.aria-selected]="isSelected(dayOfMonth)"
-        [class.month__date--disabled]="isDisabled(dayOfMonth)"
-        [attr.aria-disabled]="isDisabled(dayOfMonth)"
-        [class.month__date--active]="isActive(dayOfMonth)"
-        [tabIndex]="isActive(dayOfMonth) ? 0 : -1"
-        [attr.aria-current]="!isCurrent(dayOfMonth) && 'date'"
-        role="option"
-        [attr.cdkFocusInitial]="isActive(dayOfMonth) ? '' : null"
+    [dateTime]="dayOfMonth | date:'yyyy-MM-dd'"
+    [attr.aria-label]="dayOfMonth | date:'fullDate':undefined:locale"
+    [class.month__date--selected]="isSelected(dayOfMonth)"
+    [attr.aria-selected]="isSelected(dayOfMonth)"
+    [class.month__date--disabled]="isDisabled(dayOfMonth)"
+    [attr.aria-disabled]="isDisabled(dayOfMonth)"
+    [class.month__date--active]="isActive(dayOfMonth)"
+    [tabIndex]="isActive(dayOfMonth) ? 0 : -1"
+    [attr.aria-current]="!isCurrent(dayOfMonth) && 'date'"
+    role="option"
+    [attr.cdkFocusInitial]="isActive(dayOfMonth) ? '' : null"
   >{{dayOfMonth | date:'d'}}</time>
+</div>
+  
 </div>
